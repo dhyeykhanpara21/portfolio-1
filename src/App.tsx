@@ -1,4 +1,7 @@
+import { useEffect } from "react"
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom"
+import Lenis from "lenis"
+import "lenis/dist/lenis.css"
 import { AnimatePresence } from "framer-motion"
 import { Navbar } from "@/components/Navbar"
 import { About } from "@/components/About"
@@ -32,10 +35,20 @@ function AnimatedRoutes() {
 }
 
 function App() {
+  useEffect(() => {
+    const lenis = new Lenis({
+      autoRaf: true,
+    });
+
+    return () => {
+      lenis.destroy()
+    }
+  }, [])
+
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className="min-h-screen bg-[#030303] text-white selection:bg-indigo-500/30 selection:text-indigo-200 flex flex-col justify-between">
+      <div className="min-h-screen bg-[#F4F4F5] text-[#111111] selection:bg-black selection:text-white flex flex-col justify-between font-sans">
         <Navbar />
         <main className="flex-grow">
           <AnimatedRoutes />
