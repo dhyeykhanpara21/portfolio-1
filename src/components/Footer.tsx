@@ -53,9 +53,7 @@ export function Footer() {
           </div>
 
           <div className="flex flex-col">
-            <h1 className="text-[18vw] font-black tracking-tighter uppercase leading-none text-center">
-              DHANYESH®
-            </h1>
+            <h1 className="text-[18vw] font-black tracking-tighter uppercase leading-none text-center">DHANYESH®</h1>
             
             <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-[#F4F4F5]/50 border-t border-[#F4F4F5]/20 py-4 mt-8">
               <span>© 2026 DHANYESH HIRANI. ALL RIGHTS RESERVED.</span>

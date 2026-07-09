@@ -18,7 +18,7 @@ export function Navbar() {
         <div className="hidden md:flex items-center gap-12 text-[#111] font-medium tracking-tight">
           <div className="flex items-center gap-8 text-sm md:text-base">
             <Link to="/projects" className="hover:opacity-50 transition-opacity">Work</Link>
-            <Link to="/#services" className="hover:opacity-50 transition-opacity">Services</Link>
+            <Link to="/education" className="hover:opacity-50 transition-opacity">Education</Link>
             <Link to="/about" className="hover:opacity-50 transition-opacity">About</Link>
           </div>
           <Link
@@ -53,7 +53,7 @@ export function Navbar() {
           >
             <div className="px-4 py-8 flex flex-col gap-6 text-2xl font-bold tracking-tighter uppercase">
               <Link to="/projects" onClick={() => setMobileMenuOpen(false)}>Work</Link>
-              <Link to="/#services" onClick={() => setMobileMenuOpen(false)}>Services</Link>
+              <Link to="/education" onClick={() => setMobileMenuOpen(false)}>Education</Link>
               <Link to="/about" onClick={() => setMobileMenuOpen(false)}>About</Link>
               <Link to="/contact" onClick={() => setMobileMenuOpen(false)} className="mt-4 border-b-2 border-[#111] pb-1 w-fit">
                 Let's talk

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useCallback } from "react"
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion"
 import { ReactLenis } from "lenis/react"
 import { Link } from "react-router-dom"
@@ -56,6 +56,80 @@ const services = [
     desc: "Normalizing relational databases, designing key constraints, parsing script files, and structuring clean, optimized SQL join queries to ensure data integrity and rapid retrieval."
   }
 ]
+
+function ProjectCard({ project }: { project: typeof featuredProjects[0] }) {
+  const [hovered, setHovered] = useState(false)
+  const [imgPos, setImgPos] = useState({ x: 0, y: 0 })
+  const sectionRef = useRef<HTMLDivElement>(null)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = sectionRef.current?.getBoundingClientRect()
+    if (!rect) return
+    setImgPos({
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+    })
+  }, [])
+
+  return (
+    <div
+      ref={sectionRef}
+      className="relative border-b border-[#F4F4F5]/10 overflow-hidden cursor-none"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onMouseMove={handleMouseMove}
+    >
+      {/* Floating image card that follows cursor */}
+      <motion.div
+        className="pointer-events-none absolute z-20 w-[320px] md:w-[420px] aspect-[4/3] overflow-hidden"
+        style={{ left: imgPos.x, top: imgPos.y, translateX: "-50%", translateY: "-50%" }}
+        animate={{ opacity: hovered ? 1 : 0, scale: hovered ? 1 : 0.85 }}
+        transition={{ duration: 0.4, ease: [0.19, 1, 0.22, 1] }}
+      >
+        <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+        {/* hover overlay */}
+        <div className="absolute inset-0 bg-[#111]/70 flex flex-col items-center justify-center gap-2 opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-[#F4F4F5]/60">(CASE STUDY)</span>
+          <span className="text-lg font-bold uppercase tracking-tight text-[#F4F4F5] border border-[#F4F4F5] px-4 py-2">View Project</span>
+        </div>
+      </motion.div>
+
+      {/* Row content */}
+      <div className="px-4 md:px-8 max-w-[1400px] mx-auto">
+        {/* Title row */}
+        <div className="flex justify-between items-center py-8 md:py-12">
+          <motion.h3
+            animate={{ x: hovered ? 12 : 0, opacity: hovered ? 0.5 : 1 }}
+            transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+            className="text-[10vw] md:text-[8vw] font-black tracking-tighter uppercase leading-none"
+          >
+            {project.title}
+          </motion.h3>
+          <motion.span
+            animate={{ x: hovered ? -12 : 0, opacity: hovered ? 0.3 : 0.5 }}
+            transition={{ duration: 0.5, ease: [0.19, 1, 0.22, 1] }}
+            className="text-[10vw] md:text-[8vw] font-black tracking-tighter leading-none"
+          >
+            {project.num}
+          </motion.span>
+        </div>
+
+        {/* Bottom meta strip */}
+        <div className="flex flex-col md:flex-row justify-between items-start gap-6 pb-8 md:pb-12 text-xs font-bold uppercase tracking-widest text-[#F4F4F5]/40">
+          <div className="flex flex-col gap-1">
+            {project.disciplines.split(" • ").map((d) => (
+              <span key={d}>{d}</span>
+            ))}
+          </div>
+          <p className="max-w-xs text-[#F4F4F5]/60 normal-case font-normal tracking-normal text-sm leading-relaxed">
+            {project.desc}
+          </p>
+          <span>{project.year}</span>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 const ServiceAccordion = ({ service, isOpen, onClick }: any) => {
   return (
@@ -155,55 +229,21 @@ export function Home() {
           </div>
         </section>
 
-        <section className="bg-[#111] text-[#F4F4F5] py-24 md:py-40 px-4 md:px-8">
-          <div className="max-w-[1400px] mx-auto">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-24 md:mb-40 border-b border-[#F4F4F5]/20 pb-8 gap-8">
-              <div className="text-xs font-bold uppercase tracking-widest max-w-[200px]">
-                A selection of brand identity, art direction, and digital design projects.
+        <section className="bg-[#111] text-[#F4F4F5]">
+          <div className="max-w-[1400px] mx-auto px-4 md:px-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end py-16 md:py-24 border-b border-[#F4F4F5]/10 gap-8">
+              <div className="text-xs font-bold uppercase tracking-widest max-w-[200px] text-[#F4F4F5]/40">
+                A selection of engineering, database, and frontend projects.
               </div>
               <h2 className="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">
                 SELECTED WORK
               </h2>
             </div>
-
-            <div className="flex flex-col relative w-full h-[300vh]">
-              {featuredProjects.map((project, idx) => (
-                <div 
-                  key={project.id} 
-                  className="group cursor-pointer sticky flex flex-col justify-center min-h-screen bg-[#111] w-full"
-                  style={{ top: 0, paddingTop: `${idx * 2}rem`, zIndex: idx }}
-                >
-                  <div className="flex justify-between items-start mb-8 text-[#F4F4F5]/50 group-hover:text-[#F4F4F5] transition-colors">
-                    <h3 className="text-3xl md:text-6xl font-bold tracking-tighter uppercase">{project.title}</h3>
-                    <span className="text-3xl md:text-6xl font-bold tracking-tighter">{project.num}</span>
-                  </div>
-                  
-                  <div className="w-full h-[60vh] md:h-[70vh] bg-[#222] relative overflow-hidden mb-8">
-                    <motion.img 
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.7, ease: "easeOut" }}
-                      src={project.image} 
-                      alt={project.title} 
-                      className="w-full h-full object-cover opacity-80" 
-                    />
-                  </div>
-
-                  <div className="flex flex-col md:flex-row justify-between items-start text-xs font-bold uppercase tracking-widest gap-4 text-[#F4F4F5]/60 pb-16">
-                    <div className="flex flex-col gap-1">
-                      <span>Disciplines</span>
-                      <span className="text-[#F4F4F5]">{project.disciplines}</span>
-                    </div>
-                    <div className="max-w-sm text-center md:text-left text-[#F4F4F5]">
-                      {project.desc}
-                    </div>
-                    <div>
-                      {project.year}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
+
+          {featuredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
         </section>
 
         <section className="py-24 md:py-40 px-4 md:px-8 max-w-[1400px] mx-auto">

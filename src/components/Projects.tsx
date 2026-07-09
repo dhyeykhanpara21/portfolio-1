@@ -1,188 +1,178 @@
-import { motion } from "framer-motion"
-import { BrainCircuit, ChevronRight } from "lucide-react"
+import { useRef } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
+import { ReactLenis } from "lenis/react"
+import { ArrowUpRight } from "lucide-react"
+import { Link } from "react-router-dom"
 import { PageWrapper } from "./PageWrapper"
 import coffeeProjectImg from "../assets/coffee_project.png"
 import sqlProjectImg from "../assets/sql_project.png"
 import skillsVisualImg from "../assets/skills_visual.png"
 
-export function Projects() {
-  const projectsData = [
-    {
-      id: "coffee-shop",
-      title: "Coffee Shop Website",
-      category: "Full-Stack Web App",
-      image: coffeeProjectImg,
-      desc: "Developed a dynamic, J2EE-based coffee shop web application that allows users to seamlessly browse catalog items, manage a virtual cart, and complete simulated orders.",
-      features: [
-        "Interactive product showcase & menu items catalog",
-        "Persistent cart logic using Servlet HTTPSessions",
-        "Modular JSP templates for consistent header/footer rendering",
-        "Configured MySQL backend for item catalogs and order records"
-      ],
-      aiCollab: {
-        claude: "Guided back-end Servlet structures, J2EE request lifecycles, and database connection logic optimizations.",
-        chatgpt: "Refined frontend stylesheet parameters, CSS layouts, and drafted technical document outlines."
-      },
-      tech: ["Java", "Servlets", "JSP", "HTML", "CSS", "JavaScript", "SQL"]
-    },
-    {
-      id: "sql-analyzer",
-      title: "SQL Query Analyzer & Formatter",
-      category: "Database Utility",
-      image: sqlProjectImg,
-      desc: "Constructed a standalone database developer utility designed to parse SQL script files, analyze query execution plans, format code layout, and outline join topologies.",
-      features: [
-        "Parses SQL script files and isolates nested subqueries",
-        "Visualizes index utilization recommendations",
-        "Formats messy SQL strings into aligned indent structures",
-        "Outlines relational schema constraints and primary key flows"
-      ],
-      aiCollab: {
-        claude: "Structured JDBC connection utilities and query runtime plan mapping algorithms.",
-        chatgpt: "Generated SQL syntax token regex, documentation layouts, and test schema tables."
-      },
-      tech: ["Java", "JDBC", "SQL", "RegEx", "Eclipse Workspace"]
-    },
-    {
-      id: "portfolio-v2",
-      title: "Dynamic Developer Portfolio",
-      category: "Frontend Web App",
-      image: skillsVisualImg,
-      desc: "Built this exact premium portfolio interface utilizing modular React components, TypeScript contracts, Tailwind CSS v4 variables, client-side routing, and Framer Motion transitions.",
-      features: [
-        "Client-side routing transitions utilizing React Router context",
-        "Staggered entrance animations on scroll using Framer Motion",
-        "Interactive form handlers with validation and state transitions",
-        "Tailwind CSS v4 setup with custom scrollbar variables"
-      ],
-      aiCollab: {
-        claude: "Refactored code into modular section components and configured TS config mappings.",
-        chatgpt: "Refined tailwind stylesheet configuration paths and animations layout curves."
-      },
-      tech: ["React", "TypeScript", "Tailwind CSS v4", "Framer Motion", "Vite"]
-    }
-  ]
+const projects = [
+  {
+    id: "coffee-shop",
+    num: "01",
+    title: "Coffee Shop Website",
+    category: "Full-Stack Web App",
+    year: "2024",
+    disciplines: "Java / Servlets / JSP / MySQL",
+    image: coffeeProjectImg,
+    desc: "A dynamic J2EE-based coffee shop web application with catalog browsing, cart management, and simulated order flow backed by MySQL.",
+    tech: ["Java", "Servlets", "JSP", "HTML", "CSS", "JavaScript", "SQL"],
+  },
+  {
+    id: "sql-analyzer",
+    num: "02",
+    title: "SQL Query Analyzer",
+    category: "Database Utility",
+    year: "2024",
+    disciplines: "Java / JDBC / SQL / RegEx",
+    image: sqlProjectImg,
+    desc: "A standalone developer utility to parse SQL scripts, visualize query execution plans, auto-format SQL strings, and outline schema constraints.",
+    tech: ["Java", "JDBC", "SQL", "RegEx", "Eclipse"],
+  },
+  {
+    id: "portfolio-v2",
+    num: "03",
+    title: "Developer Portfolio",
+    category: "Frontend Web App",
+    year: "2025",
+    disciplines: "React / TypeScript / Framer Motion",
+    image: skillsVisualImg,
+    desc: "This very portfolio — built with modular React components, TypeScript, Framer Motion animations, Lenis smooth scroll, and Vite.",
+    tech: ["React", "TypeScript", "Framer Motion", "Lenis", "Vite"],
+  },
+]
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  }
+function ProjectRow({ project }: { project: typeof projects[0] }) {
+  const ref = useRef(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] })
+  const y = useTransform(scrollYProgress, [0, 1], [60, -60])
 
   return (
-    <PageWrapper>
-      <section id="projects" className="py-8 relative overflow-hidden">
-        <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-indigo-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-        
-        <div className="max-w-5xl mx-auto px-4 md:px-8 space-y-16">
-          
-          {/* Title */}
-          <div className="mb-16 space-y-4 text-center max-w-xl mx-auto">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-violet-400 uppercase">
-              <div className="h-1.5 w-1.5 rounded-full bg-violet-500" />
-              03 / Selected Works
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Featured Engineering Projects
-            </h2>
-            <p className="text-white/40 font-light text-sm">
-              Explore my academic and utility implementations, built using Java, database schemas, modern web tooling, and collaborative AI design patterns.
-            </p>
+    <div ref={ref} className="border-t border-[#111]/10">
+      <div className="group flex flex-col md:flex-row gap-0 cursor-pointer">
+        {/* Left: meta */}
+        <div className="md:w-1/3 py-8 md:py-12 pr-8 flex flex-col justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <span className="text-xs font-bold uppercase tracking-widest text-[#111]/30">{project.num}</span>
+            <h3 className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-none group-hover:opacity-60 transition-opacity duration-300">
+              {project.title}
+            </h3>
           </div>
+          <div className="flex flex-col gap-1 text-xs font-bold uppercase tracking-widest text-[#111]/50">
+            <span>{project.disciplines}</span>
+            <span>{project.year}</span>
+          </div>
+        </div>
 
-          {/* Project List */}
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            className="space-y-12"
-          >
-            {projectsData.map((project) => (
-              <div
-                key={project.id}
-                className="rounded-3xl border border-white/[0.08] bg-[#08080a]/60 overflow-hidden shadow-2xl relative"
+        {/* Right: image */}
+        <div className="md:w-2/3 overflow-hidden relative h-[50vw] md:h-[35vw] max-h-[600px]">
+          <motion.img
+            style={{ y }}
+            src={project.image}
+            alt={project.title}
+            className="w-full h-[115%] object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+          />
+          <div className="absolute inset-0 bg-[#111]/0 group-hover:bg-[#111]/10 transition-colors duration-500 flex items-center justify-center">
+            <motion.div
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1, opacity: 1 }}
+              className="w-16 h-16 rounded-full bg-[#F4F4F5] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+            >
+              <ArrowUpRight className="h-6 w-6 text-[#111]" />
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      {/* Expanded desc strip */}
+      <div className="pb-8 md:pl-[33.333%] md:pr-0">
+        <p className="text-sm md:text-base text-[#111]/50 max-w-lg leading-relaxed">{project.desc}</p>
+        <div className="flex flex-wrap gap-2 mt-4">
+          {project.tech.map((t) => (
+            <span key={t} className="text-xs font-bold uppercase tracking-widest border border-[#111]/10 px-3 py-1 text-[#111]/50">
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export function Projects() {
+  const heroRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 140])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+
+  return (
+    <ReactLenis root>
+      <PageWrapper noPadding>
+        <div className="bg-[#F4F4F5] text-[#111] min-h-screen font-sans selection:bg-[#111] selection:text-white">
+
+          {/* HERO */}
+          <section ref={heroRef} className="pt-28 pb-0 px-4 md:px-8 max-w-[1400px] mx-auto min-h-[65vh] flex flex-col justify-end">
+            <div className="flex justify-between items-start text-xs font-semibold uppercase tracking-widest mb-12">
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
+                className="max-w-[200px] leading-relaxed hidden sm:block text-[#111]/50"
               >
-                <div className="grid lg:grid-cols-12 gap-0">
-                  
-                  {/* Image Panel */}
-                  <div className="lg:col-span-5 relative h-72 lg:h-auto overflow-hidden group min-h-[350px]">
-                    <div className="absolute inset-0 bg-indigo-950/20 mix-blend-overlay z-10" />
-                    <img
-                      src={project.image}
-                      alt={`${project.title} mockup`}
-                      className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-black via-black/40 to-transparent z-15 pointer-events-none" />
-                    <div className="absolute bottom-6 left-6 z-20">
-                      <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-xs font-light text-indigo-300 backdrop-blur-sm">
-                        {project.category}
-                      </span>
-                    </div>
-                  </div>
+                Selected work — Full-stack engineering projects built from 2024–2025.
+              </motion.div>
+              <Link to="/contact" className="border-b-2 border-[#111] pb-0.5 hover:opacity-50 transition-opacity">
+                Let's talk ↗
+              </Link>
+            </div>
 
-                  {/* Content Panel */}
-                  <div className="lg:col-span-7 p-8 md:p-10 flex flex-col justify-between">
-                    <div className="space-y-6">
-                      <div>
-                        <h3 className="text-2xl md:text-3xl font-bold mb-2 tracking-tight text-white/95">{project.title}</h3>
-                        <p className="text-sm font-light text-white/40">{project.category} System Platform</p>
-                      </div>
-
-                      <p className="text-sm text-white/70 leading-relaxed font-light">
-                        {project.desc}
-                      </p>
-
-                      {/* Features */}
-                      <div className="space-y-2">
-                        <h4 className="text-xs font-semibold uppercase tracking-wider text-white/40">Core Functionalities</h4>
-                        <ul className="grid sm:grid-cols-2 gap-2 text-xs font-light text-white/70">
-                          {project.features.map((feat, idx) => (
-                            <li key={idx} className="flex items-center gap-2">
-                              <ChevronRight className="h-3.5 w-3.5 text-indigo-400 shrink-0" />
-                              {feat}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* AI Co-pilot Integration */}
-                      <div className="p-4 rounded-2xl border border-white/[0.04] bg-white/[0.01] space-y-3">
-                        <h4 className="text-xs font-semibold tracking-wider text-indigo-300 uppercase flex items-center gap-2">
-                          <BrainCircuit className="h-4 w-4" />
-                          AI Collaboration & Orchestration
-                        </h4>
-                        <div className="grid sm:grid-cols-2 gap-4 text-xs font-light text-white/60">
-                          <div>
-                            <span className="font-semibold text-white/90 block mb-1">Claude AI:</span> {project.aiCollab.claude}
-                          </div>
-                          <div>
-                            <span className="font-semibold text-white/90 block mb-1">ChatGPT:</span> {project.aiCollab.chatgpt}
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Tech stack */}
-                      <div className="flex flex-wrap gap-2 pt-2">
-                        {project.tech.map((tech) => (
-                          <span key={tech} className="px-2.5 py-0.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-xs font-light text-white/60">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
+            <motion.div style={{ y: heroY, opacity: heroOpacity }}>
+              <div className="flex flex-col font-black uppercase tracking-tighter leading-[0.85] overflow-hidden">
+                <div className="overflow-hidden">
+                  <motion.div
+                    initial={{ y: "110%" }} animate={{ y: 0 }}
+                    transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                    className="text-[13vw]"
+                  >
+                    SELECTED
+                  </motion.div>
+                </div>
+                <div className="overflow-hidden text-right">
+                  <motion.div
+                    initial={{ y: "110%" }} animate={{ y: 0 }}
+                    transition={{ duration: 1, delay: 0.1, ease: [0.76, 0, 0.24, 1] }}
+                    className="text-[13vw]"
+                  >
+                    WORK.
+                  </motion.div>
                 </div>
               </div>
+            </motion.div>
+          </section>
+
+          {/* PROJECTS LIST */}
+          <section className="px-4 md:px-8 max-w-[1400px] mx-auto mt-16 md:mt-24">
+            {projects.map((project) => (
+              <ProjectRow key={project.id} project={project} />
             ))}
-          </motion.div>
+            <div className="border-t border-[#111]/10" />
+          </section>
+
+          {/* CTA */}
+          <section className="px-4 md:px-8 max-w-[1400px] mx-auto py-24 md:py-40 flex flex-col md:flex-row justify-between items-start md:items-end gap-8 border-t border-[#111]/10 mt-16">
+            <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-tight max-w-xl">
+              GOT A PROJECT IN MIND?
+            </h2>
+            <Link
+              to="/contact"
+              className="text-sm font-bold border-b-2 border-[#111] pb-0.5 hover:opacity-50 transition-opacity whitespace-nowrap"
+            >
+              Let's build it ↗
+            </Link>
+          </section>
+
         </div>
-      </section>
-    </PageWrapper>
+      </PageWrapper>
+    </ReactLenis>
   )
 }
