@@ -1,253 +1,290 @@
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { Mail, Phone, MapPin, Send, CheckCircle2, Globe, Cpu, Database, Instagram, Github, Linkedin, MessageCircle } from "lucide-react"
+import { useState, useRef } from "react"
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
+import { ReactLenis } from "lenis/react"
 import { PageWrapper } from "./PageWrapper"
-import mapVisual from "../assets/map_visual.png"
+
+const heroLines = ["LET'S BUILD", "SOMETHING", "TOGETHER."]
+
+const socials = [
+  { label: "Instagram", href: "https://www.instagram.com/dhanyash_ptl/", handle: "@dhanyash_ptl" },
+  { label: "GitHub", href: "https://github.com/dhanyeshpatel", handle: "dhanyeshpatel" },
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/dhanyesh-hirani-125a48349/", handle: "Dhanyesh Hirani" },
+  { label: "WhatsApp", href: "https://wa.me/918799346359", handle: "+91 8799346359" },
+]
+
+const services = [
+  { num: "01", title: "Full-Stack Development", desc: "Java servlets, JSP, REST APIs, React frontends — complete end-to-end engineering." },
+  { num: "02", title: "Database Architecture", desc: "Schema design, normalization, JDBC connection pools, SQL optimization." },
+  { num: "03", title: "UI/UX Refinement", desc: "Clean responsive layouts, Framer Motion animations, polished component systems." },
+]
 
 export function Contact() {
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" })
-  const [formSubmitted, setFormSubmitted] = useState(false)
+  const [form, setForm] = useState({ name: "", email: "", project: "", message: "" })
+  const [submitted, setSubmitted] = useState(false)
+  const [focused, setFocused] = useState<string | null>(null)
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const heroRef = useRef(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 160])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (formState.name && formState.email && formState.message) {
-      setFormSubmitted(true)
+    if (form.name && form.email && form.message) {
+      setSubmitted(true)
       setTimeout(() => {
-        setFormSubmitted(false)
-        setFormState({ name: "", email: "", message: "" })
+        setSubmitted(false)
+        setForm({ name: "", email: "", project: "", message: "" })
       }, 5000)
     }
   }
 
-  const collaborations = [
-    {
-      title: "Full-Stack Development",
-      desc: "Creating modular servlet backends, setting up database parameters, and aligning responsive HTML layout flows.",
-      icon: <Cpu className="h-5 w-5 text-indigo-400" />
-    },
-    {
-      title: "Database Architecture",
-      desc: "Designing tables schemas, normalization models, indexing, and configuring JDBC query pools.",
-      icon: <Database className="h-5 w-5 text-rose-400" />
-    },
-    {
-      title: "UI/UX Enhancements",
-      desc: "Upgrading layout typography, writing clean CSS rules, and integrating fluid Framer Motion route animations.",
-      icon: <Globe className="h-5 w-5 text-violet-400" />
-    }
-  ]
-
   return (
-    <PageWrapper>
-      <section id="contact" className="py-8 relative overflow-hidden">
-        <div className="absolute top-[10%] left-[-15%] w-[400px] h-[400px] bg-rose-500/[0.02] rounded-full blur-3xl pointer-events-none" />
-        <div className="max-w-5xl mx-auto px-4 md:px-8 space-y-16">
-          
-          {/* Title */}
-          <div className="text-center max-w-xl mx-auto mb-20 space-y-4">
-            <div className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest text-amber-400 uppercase">
-              <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />
-              05 / Collaboration
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Get in Touch
-            </h2>
-            <p className="text-white/40 font-light text-sm">
-              Feel free to reach out for project opportunities, job offers, or system design collaborations. I'll get back to you shortly.
-            </p>
-          </div>
+    <ReactLenis root>
+      <PageWrapper noPadding>
+        <div className="bg-[#F4F4F5] text-[#111] font-sans selection:bg-[#111] selection:text-white overflow-x-hidden">
 
-          {/* Grid Layout: Visual Map Panel + Details + Form */}
-          <div className="grid lg:grid-cols-12 gap-8 items-start">
-            
-            {/* Left Side: Map Visual + Contact cards */}
-            <div className="lg:col-span-5 space-y-6">
-              
-              {/* Abstract Map Locator */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-                className="rounded-3xl border border-white/[0.08] overflow-hidden relative h-52 group shadow-xl"
+          {/* ── HERO ── */}
+          <section ref={heroRef} className="relative min-h-screen flex flex-col justify-between pt-28 pb-12 px-4 md:px-8 max-w-[1400px] mx-auto">
+
+            <div className="flex justify-between items-start text-xs font-bold uppercase tracking-widest">
+              <motion.span
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 1 }}
+                className="text-[#111]/40"
               >
-                <div className="absolute inset-0 bg-indigo-950/20 mix-blend-overlay z-10" />
-                <img
-                  src={mapVisual}
-                  alt="Gujarat coordinate pinpoint map visual graphic representation"
-                  className="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-[1.02] transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-15 pointer-events-none" />
-                <div className="absolute bottom-4 left-4 z-20 flex items-center gap-2">
-                  <div className="h-2 w-2 rounded-full bg-rose-500 animate-ping" />
-                  <span className="text-xs font-semibold text-white/80 font-mono">Gujarat, India (IST)</span>
+                05 — GET IN TOUCH
+              </motion.span>
+              <motion.a
+                href="mailto:dhanyeshpatel@gmail.com"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}
+                className="border-b-2 border-[#111] pb-0.5 hover:opacity-50 transition-opacity"
+              >
+                dhanyeshpatel@gmail.com ↗
+              </motion.a>
+            </div>
+
+            <motion.div style={{ y: heroY, opacity: heroOpacity }} className="flex flex-col font-black uppercase tracking-tighter leading-[0.82] mt-12 mb-12">
+              {heroLines.map((line, i) => (
+                <div key={line} className="overflow-hidden">
+                  <motion.div
+                    initial={{ y: "110%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 1.1, delay: i * 0.1, ease: [0.76, 0, 0.24, 1] as [number,number,number,number] }}
+                    className={`text-[12vw] md:text-[10vw] ${i === 1 ? "text-right" : ""}`}
+                  >
+                    {line}
+                  </motion.div>
+                </div>
+              ))}
+            </motion.div>
+
+            <div className="flex flex-col md:flex-row justify-between items-start gap-6 border-t border-[#111]/10 pt-8">
+              <motion.span
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}
+                className="text-xs font-bold uppercase tracking-widest text-[#111]/30"
+              >
+                RESPONSE WITHIN 24H
+              </motion.span>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 1.3 }}
+                className="text-base md:text-xl font-medium max-w-lg leading-snug"
+              >
+                Whether it's a complex full-stack project or a quick database fix — I'm ready to hear about it.
+              </motion.p>
+            </div>
+          </section>
+
+          {/* ── SERVICES STRIP ── */}
+          <section className="border-t border-[#111]/10">
+            {services.map((svc) => (
+              <motion.div
+                key={svc.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] as [number,number,number,number] }}
+                className="border-b border-[#111]/10 px-4 md:px-8 max-w-[1400px] mx-auto"
+              >
+                <div className="py-8 md:py-10 flex flex-col md:flex-row md:items-center gap-6 md:gap-16">
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#111]/30 md:w-12 shrink-0">{svc.num}</span>
+                  <h3 className="text-2xl md:text-4xl font-black tracking-tighter uppercase md:w-1/3 shrink-0">{svc.title}</h3>
+                  <p className="text-sm md:text-base text-[#111]/50 leading-relaxed max-w-md">{svc.desc}</p>
                 </div>
               </motion.div>
+            ))}
+          </section>
 
-              {/* Direct Details */}
-              <div className="space-y-4">
-                <div className="p-6 rounded-3xl border border-white/[0.06] bg-[#08080a]/50 flex items-start gap-4 hover:border-white/[0.12] transition-colors group shadow-md">
-                  <div className="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 shrink-0 group-hover:scale-110 transition-transform">
-                    <Mail className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-1">Email Address</h4>
-                    <a href="mailto:dhanyeshpatel@gmail.com" className="text-sm font-light text-white/60 hover:text-white transition-colors break-all">
-                      dhanyeshpatel@gmail.com
-                    </a>
-                    <p className="text-xs text-white/30 font-light mt-1">Send a direct message anytime.</p>
+          {/* ── FORM + SOCIALS ── */}
+          <section className="px-4 md:px-8 max-w-[1400px] mx-auto py-20 md:py-32 border-t border-[#111]/10">
+            <div className="grid md:grid-cols-2 gap-16 md:gap-24">
+
+              {/* LEFT: Form */}
+              <div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }} transition={{ duration: 0.9 }}
+                  className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-tight mb-12"
+                >
+                  START A<br />PROJECT.
+                </motion.h2>
+
+                <AnimatePresence mode="wait">
+                  {submitted ? (
+                    <motion.div
+                      key="success"
+                      initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                      className="flex flex-col gap-4 py-16 items-start"
+                    >
+                      <div className="w-12 h-12 bg-[#111] flex items-center justify-center text-[#F4F4F5] text-xl font-bold">✓</div>
+                      <h3 className="text-2xl font-black tracking-tighter uppercase">Message Sent.</h3>
+                      <p className="text-[#111]/50 text-sm">I'll get back to you within 24 hours.</p>
+                    </motion.div>
+                  ) : (
+                    <motion.form
+                      key="form"
+                      onSubmit={handleSubmit}
+                      className="flex flex-col gap-0"
+                    >
+                      {[
+                        { id: "name", label: "Your Name *", type: "text", required: true },
+                        { id: "email", label: "Email Address *", type: "email", required: true },
+                        { id: "project", label: "Project Type", type: "text", required: false },
+                      ].map(({ id, label, type, required }) => (
+                        <div key={id} className={`border-b border-[#111]/10 transition-colors duration-300 ${focused === id ? "border-[#111]" : ""}`}>
+                          <label className="block text-xs font-bold uppercase tracking-widest text-[#111]/30 pt-6 pb-1">{label}</label>
+                          <input
+                            type={type}
+                            required={required}
+                            value={(form as any)[id]}
+                            onChange={(e) => setForm({ ...form, [id]: e.target.value })}
+                            onFocus={() => setFocused(id)}
+                            onBlur={() => setFocused(null)}
+                            className="w-full bg-transparent pb-4 text-lg font-medium tracking-tight outline-none placeholder:text-[#111]/20"
+                            placeholder={id === "name" ? "Dhanyesh Hirani" : id === "email" ? "hello@example.com" : "Full-Stack / Database / UI"}
+                          />
+                        </div>
+                      ))}
+
+                      {/* Message textarea */}
+                      <div className={`border-b border-[#111]/10 transition-colors duration-300 ${focused === "message" ? "border-[#111]" : ""}`}>
+                        <label className="block text-xs font-bold uppercase tracking-widest text-[#111]/30 pt-6 pb-1">Message *</label>
+                        <textarea
+                          required
+                          rows={4}
+                          value={form.message}
+                          onChange={(e) => setForm({ ...form, message: e.target.value })}
+                          onFocus={() => setFocused("message")}
+                          onBlur={() => setFocused(null)}
+                          className="w-full bg-transparent pb-4 text-lg font-medium tracking-tight outline-none resize-none placeholder:text-[#111]/20"
+                          placeholder="Tell me about your project..."
+                        />
+                      </div>
+
+                      <motion.button
+                        type="submit"
+                        whileHover={{ backgroundColor: "#F4F4F5", color: "#111" }}
+                        className="mt-10 w-full bg-[#111] text-[#F4F4F5] py-5 text-sm font-black uppercase tracking-widest border-2 border-[#111] transition-colors duration-300"
+                      >
+                        Send Message →
+                      </motion.button>
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* RIGHT: Info + Socials */}
+              <div className="flex flex-col justify-between gap-16">
+                <div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }} transition={{ duration: 0.7 }}
+                    className="text-xs font-bold uppercase tracking-widest text-[#111]/30 mb-8"
+                  >
+                    Direct Contact
+                  </motion.h3>
+                  <div className="flex flex-col gap-6">
+                    {[
+                      { label: "Email", val: "dhanyeshpatel@gmail.com", href: "mailto:dhanyeshpatel@gmail.com" },
+                      { label: "Phone", val: "+91 8799346359", href: "tel:+918799346359" },
+                      { label: "Location", val: "Gujarat, India", href: null },
+                    ].map(({ label, val, href }, i) => (
+                      <motion.div
+                        key={label}
+                        initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
+                        className="border-b border-[#111]/10 pb-6"
+                      >
+                        <span className="text-xs font-bold uppercase tracking-widest text-[#111]/30 block mb-1">{label}</span>
+                        {href ? (
+                          <a href={href} className="text-xl font-bold tracking-tight hover:opacity-50 transition-opacity">{val}</a>
+                        ) : (
+                          <span className="text-xl font-bold tracking-tight">{val}</span>
+                        )}
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
 
-                <div className="p-6 rounded-3xl border border-white/[0.06] bg-[#08080a]/50 flex items-start gap-4 hover:border-white/[0.12] transition-colors group shadow-md">
-                  <div className="p-3 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 shrink-0 group-hover:scale-110 transition-transform">
-                    <Phone className="h-6 w-6" />
+                <div>
+                  <motion.h3
+                    initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }} transition={{ duration: 0.7 }}
+                    className="text-xs font-bold uppercase tracking-widest text-[#111]/30 mb-8"
+                  >
+                    Socials
+                  </motion.h3>
+                  <div className="flex flex-col">
+                    {socials.map(({ label, href, handle }, i) => (
+                      <motion.a
+                        key={label}
+                        href={href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }} transition={{ duration: 0.6, delay: i * 0.1 }}
+                        className="flex justify-between items-center border-b border-[#111]/10 py-4 group hover:opacity-60 transition-opacity"
+                      >
+                        <span className="text-sm font-bold uppercase tracking-widest">{label}</span>
+                        <span className="text-xs text-[#111]/40 font-medium group-hover:text-[#111] transition-colors">{handle} ↗</span>
+                      </motion.a>
+                    ))}
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-1">Phone Contact</h4>
-                    <a href="tel:+918799346359" className="text-sm font-light text-white/60 hover:text-white transition-colors">
-                      +91 8799346359
-                    </a>
-                    <p className="text-xs text-white/30 font-light mt-1">Mon - Sat, 9:00 AM to 6:00 PM IST.</p>
-                  </div>
-                </div>
-
-                <div className="p-6 rounded-3xl border border-white/[0.06] bg-[#08080a]/50 flex items-start gap-4 hover:border-white/[0.12] transition-colors group shadow-md">
-                  <div className="p-3 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-violet-400 shrink-0 group-hover:scale-110 transition-transform">
-                    <MapPin className="h-6 w-6" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm mb-1">Current Location</h4>
-                    <span className="text-sm font-light text-white/60">
-                      Ahmedabad / Gandhinagar, Gujarat, India
-                    </span>
-                    <p className="text-xs text-white/30 font-light mt-1">Open for local or remote opportunities.</p>
-                  </div>
-                </div>
-
-                 <div className="flex justify-center gap-3 pt-6 mt-6 border-t border-white/[0.06]">
-                  <a href="https://www.instagram.com/dhanyash_ptl/" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-colors text-white/50 flex items-center justify-center flex-1 gap-2" aria-label="Instagram">
-                    <Instagram className="h-4 w-4" />
-                    <span className="text-xs font-light font-mono">Instagram</span>
-                  </a>
-                  <a href="https://wa.me/918799346359" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-colors text-white/50 flex items-center justify-center flex-1 gap-2" aria-label="WhatsApp">
-                    <MessageCircle className="h-4 w-4" />
-                    <span className="text-xs font-light font-mono">WhatsApp</span>
-                  </a>
-                </div>
-                <div className="flex justify-center gap-3">
-                  <a href="https://github.com/dhanyeshpatel" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-colors text-white/50 flex items-center justify-center flex-1 gap-2" aria-label="GitHub">
-                    <Github className="h-4 w-4" />
-                    <span className="text-xs font-light font-mono">GitHub</span>
-                  </a>
-                  <a href="https://www.linkedin.com/in/dhanyesh-hirani-125a48349/" target="_blank" rel="noopener noreferrer" className="p-2.5 rounded-xl bg-white/[0.02] border border-white/[0.06] hover:bg-white/[0.08] hover:text-white transition-colors text-white/50 flex items-center justify-center flex-1 gap-2" aria-label="LinkedIn">
-                    <Linkedin className="h-4 w-4" />
-                    <span className="text-xs font-light font-mono">LinkedIn</span>
-                  </a>
                 </div>
               </div>
             </div>
+          </section>
 
-            {/* Right Side: Contact Form */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:col-span-7 p-8 rounded-3xl border border-white/[0.06] bg-[#08080a]/30 backdrop-blur-sm relative min-h-[380px] shadow-xl"
-            >
-              <AnimatePresence mode="wait">
-                {formSubmitted ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 space-y-4"
-                  >
-                    <div className="h-12 w-12 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 animate-bounce">
-                      <CheckCircle2 className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-bold">Message Transmitted!</h4>
-                      <p className="text-xs font-light text-white/50 mt-1 max-w-xs mx-auto">
-                        Thank you for reaching out. Your message has been sent successfully.
-                      </p>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleFormSubmit} className="space-y-5">
-                    <div className="space-y-2">
-                      <label htmlFor="name" className="text-xs font-semibold uppercase tracking-wider text-white/40">Your Name</label>
-                      <input
-                        type="text"
-                        id="name"
-                        required
-                        value={formState.name}
-                        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                        placeholder="John Doe"
-                        className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="email" className="text-xs font-semibold uppercase tracking-wider text-white/40">Email Address</label>
-                      <input
-                        type="email"
-                        id="email"
-                        required
-                        value={formState.email}
-                        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                        placeholder="john@example.com"
-                        className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 transition-colors"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label htmlFor="message" className="text-xs font-semibold uppercase tracking-wider text-white/40">Message</label>
-                      <textarea
-                        id="message"
-                        required
-                        rows={4}
-                        value={formState.message}
-                        onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-                        placeholder="Let's build something great..."
-                        className="w-full px-4 py-3 rounded-xl border border-white/[0.06] bg-white/[0.02] text-sm text-white placeholder-white/20 focus:outline-none focus:border-indigo-500/50 transition-colors resize-none"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-rose-500 text-sm font-semibold hover:shadow-lg hover:shadow-indigo-500/10 active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
-                    >
-                      <Send className="h-4 w-4" />
-                      Send Message
-                    </button>
-                  </form>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-
-          {/* Section: Collaboration Scopes Grid */}
-          <div className="space-y-6 border-t border-white/[0.06] pt-12">
-            <h4 className="text-lg font-bold tracking-tight text-white/90">Scope of Collaborations</h4>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {collaborations.map((collab) => (
-                <div
-                  key={collab.title}
-                  className="p-6 rounded-3xl border border-white/[0.06] bg-white/[0.01] hover:bg-white/[0.03] transition-all duration-300 shadow-md flex flex-col justify-between"
-                >
-                  <div className="space-y-4">
-                    <div className="p-3 rounded-xl bg-white/[0.02] border border-white/[0.06] w-fit">
-                      {collab.icon}
-                    </div>
-                    <h5 className="font-semibold text-sm tracking-tight text-white/95">{collab.title}</h5>
-                  </div>
-                  <p className="text-xs text-white/50 leading-relaxed font-light mt-4">{collab.desc}</p>
+          {/* ── AVAILABILITY BANNER ── */}
+          <section className="bg-[#111] text-[#F4F4F5] py-20 md:py-32 px-4 md:px-8">
+            <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+              <div className="flex flex-col gap-4">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#F4F4F5]/30">Current Status</span>
+                <div className="flex items-center gap-3">
+                  <span className="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse" />
+                  <span className="text-sm font-bold uppercase tracking-widest text-green-400">Available for Projects</span>
                 </div>
-              ))}
+                <h2 className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-tight mt-4">
+                  OPEN TO<br />NEW WORK.
+                </h2>
+              </div>
+              <div className="flex flex-col gap-6 md:text-right">
+                <p className="text-sm text-[#F4F4F5]/50 max-w-xs leading-relaxed">
+                  Looking for internships, freelance contracts, and full-time roles in full-stack Java development.
+                </p>
+                <a
+                  href="mailto:dhanyeshpatel@gmail.com"
+                  className="text-sm font-bold border-b-2 border-[#F4F4F5] pb-0.5 w-fit md:ml-auto hover:opacity-50 transition-opacity"
+                >
+                  dhanyeshpatel@gmail.com ↗
+                </a>
+              </div>
             </div>
-          </div>
+          </section>
 
         </div>
-      </section>
-    </PageWrapper>
+      </PageWrapper>
+    </ReactLenis>
   )
 }
