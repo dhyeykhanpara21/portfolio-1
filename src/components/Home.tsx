@@ -196,10 +196,10 @@ export function Home() {
               <div className="overflow-hidden">
                 <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }} className="md:mr-[10%]">DHANYESH.</motion.div>
               </div>
-              <div className="overflow-hidden z-20 mix-blend-difference text-[#F4F4F5]">
+              <div className="overflow-hidden">
                 <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 1, delay: 0.1, ease: [0.76, 0, 0.24, 1] }} className="md:mr-[5%]">FULL-STACK.</motion.div>
               </div>
-              <div className="overflow-hidden z-20 mix-blend-difference text-[#F4F4F5]">
+              <div className="overflow-hidden">
                 <motion.div initial={{ y: "100%" }} animate={{ y: 0 }} transition={{ duration: 1, delay: 0.2, ease: [0.76, 0, 0.24, 1] }}>DEVELOPER.</motion.div>
               </div>
             </div>
@@ -216,7 +216,7 @@ export function Home() {
 
           <div className="flex flex-col md:flex-row justify-end items-start gap-8 mb-32 md:mb-48">
             <div className="w-full md:w-1/4 h-[30vh] bg-black flex items-center justify-center overflow-hidden">
-              <img src={skillsVisualImg} alt="Abstract" className="w-full h-full object-cover opacity-60 grayscale" />
+              <img src={skillsVisualImg} alt="Abstract" className="w-full h-full object-cover opacity-60 hover:opacity-100 hover-color-image" />
             </div>
             <div className="w-full md:w-1/3 flex flex-col gap-6 text-sm md:text-base font-medium leading-relaxed">
               <p>
@@ -280,7 +280,7 @@ export function Home() {
 
           <div className="flex flex-col md:flex-row justify-between items-start gap-12">
             <div className="w-full md:w-1/3 h-[50vh] bg-black overflow-hidden">
-               <img src={coffeeProjectImg} alt="Vision" className="w-full h-full object-cover grayscale opacity-80" />
+               <img src={coffeeProjectImg} alt="Vision" className="w-full h-full object-cover opacity-80 hover:opacity-100 hover-color-image" />
             </div>
             <div className="w-full md:w-1/2 flex flex-col gap-12 pt-8">
               <h3 className="text-3xl md:text-6xl font-bold tracking-tighter uppercase leading-none max-w-lg">

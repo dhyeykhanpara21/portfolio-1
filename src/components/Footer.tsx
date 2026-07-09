@@ -1,4 +1,5 @@
 import { Heart } from "lucide-react"
+import logo from "../assets/logo.png"
 
 export function Footer() {
   return (
@@ -24,8 +25,12 @@ export function Footer() {
         <div className="max-w-[1400px] mx-auto flex flex-col justify-between h-full min-h-[50vh]">
           
           <div className="flex flex-col md:flex-row justify-between items-start gap-16 mb-20">
-            <div className="flex flex-col gap-8 max-w-sm">
-              <h3 className="text-xl md:text-2xl font-bold tracking-tighter uppercase leading-snug">
+            <div className="flex flex-col gap-6 max-w-sm">
+              <div className="flex items-center gap-2.5">
+                <img src={logo} alt="DH Logo" className="h-8 md:h-10 w-auto object-contain" />
+                <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">DHANYESH®</span>
+              </div>
+              <h3 className="text-xl md:text-2xl font-bold tracking-tighter uppercase leading-snug text-[#F4F4F5]/80">
                 DHANYESH IS A FULL-STACK ENGINEER BUILDING LOGICAL SYSTEMS AND REFINED INTERFACES.
               </h3>
               <div className="flex flex-col gap-2 text-xs font-bold uppercase tracking-widest">

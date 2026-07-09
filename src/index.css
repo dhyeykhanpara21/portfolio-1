@@ -26,3 +26,13 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #BBBBBB;
 }
+
+/* Hover color transition for portfolio images */
+.hover-color-image {
+  filter: grayscale(100%);
+  transition: filter 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.hover-color-image:hover {
+  filter: grayscale(0%);
+}
