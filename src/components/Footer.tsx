@@ -1,5 +1,5 @@
 import { Heart } from "lucide-react"
-import logo from "../assets/logo.png"
+import logoDark from "../assets/logo_dark.png"
 
 export function Footer() {
   return (
@@ -26,9 +26,8 @@ export function Footer() {
           
           <div className="flex flex-col md:flex-row justify-between items-start gap-16 mb-20">
             <div className="flex flex-col gap-6 max-w-sm">
-              <div className="flex items-center gap-2.5">
-                <img src={logo} alt="DH Logo" className="h-8 md:h-10 w-auto object-contain" />
-                <span className="text-xl md:text-2xl font-black tracking-tighter uppercase">DHANYESH®</span>
+              <div className="flex items-center">
+                <img src={logoDark} alt="DH Logo" className="h-10 md:h-12 w-auto object-contain" />
               </div>
               <h3 className="text-xl md:text-2xl font-bold tracking-tighter uppercase leading-snug text-[#F4F4F5]/80">
                 DHANYESH IS A FULL-STACK ENGINEER BUILDING LOGICAL SYSTEMS AND REFINED INTERFACES.
@@ -62,7 +61,7 @@ export function Footer() {
             
             <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest text-[#F4F4F5]/50 border-t border-[#F4F4F5]/20 py-4 mt-8">
               <span>© 2026 DHANYESH HIRANI. ALL RIGHTS RESERVED.</span>
-              <span className="flex items-center gap-1">MADE WITH <Heart className="h-2 w-2 text-[#F4F4F5] fill-[#F4F4F5]" /> & AI</span>
+              <span className="flex items-center gap-1">MADE WITH <Heart className="h-2 w-2 text-[#F4F4F5] fill-[#F4F4F5]" /> & Fun</span>
             </div>
           </div>
           
